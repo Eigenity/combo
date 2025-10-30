@@ -6,8 +6,6 @@ import combo.sat.constraints.*
 import combo.sat.constraints.Relation.*
 import combo.util.IntCollection
 import combo.util.RandomSequence
-import combo.util.millis
-import combo.util.nanos
 import org.sat4j.core.LiteralsUtils.negLit
 import org.sat4j.core.LiteralsUtils.posLit
 import org.sat4j.core.Vec
@@ -43,7 +41,7 @@ import org.sat4j.pb.SolverFactory as PBSolverFactory
  */
 class Sat4JSolver @JvmOverloads constructor(
         val problem: Problem,
-        override val randomSeed: Int = nanos().toInt(),
+        override val randomSeed: Int = System.currentTimeMillis().toInt(),
         override val timeout: Long = -1L,
         val instanceFactory: InstanceFactory = BitArrayFactory,
         val maxConflicts: Int = 0,
@@ -165,10 +163,10 @@ class Sat4JSolver @JvmOverloads constructor(
         val iterator = ModelIterator(solver)
         val assumption = VecInt(assumptions.toArray())
         val timeout = timeout
-        val end = if (timeout > 0L) millis() + timeout else Long.MAX_VALUE
+        val end = if (timeout > 0L) System.currentTimeMillis() + timeout else Long.MAX_VALUE
         return generateSequence {
             try {
-                if (timeout > 0L && millis() >= end) null
+                if (timeout > 0L && System.currentTimeMillis() >= end) null
                 else if (!iterator.isSatisfiable(assumption)) null
                 else iterator.model().toInstance()
             } catch (e: TimeoutException) {
@@ -209,13 +207,15 @@ class Sat4JSolver @JvmOverloads constructor(
     }
 
     private class TimeoutListener(val timeout: Long) : SearchListenerAdapter<ISolverService>() {
-        private val end = timeout + millis()
+        private val end = timeout + System.currentTimeMillis()
         override fun assuming(p: Int) {
-            if (end < millis()) throw TimeoutException(timeout)
+            if (end < System.currentTimeMillis()) throw TimeoutException(timeout)
         }
     }
 
-    private object VoidListener : SearchListenerAdapter<ISolverService>()
+    private object VoidListener : SearchListenerAdapter<ISolverService>() {
+        private fun readResolve(): Any = VoidListener
+    }
 
     private class RandomLiteralSelectionStrategySeeded(val rng: Random) : IPhaseSelectionStrategy {
         override fun assignLiteral(p: Int) {}

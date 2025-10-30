@@ -1,5 +1,6 @@
 package combo.util
 
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
 
 /**
@@ -7,7 +8,7 @@ import kotlin.random.Random
  * environment (like unit tests). This works very similar to seed sequence in C++.
  */
 class RandomSequence(val sequenceStart: Int) {
-    private val seedUniquifier = AtomicInt(sequenceStart)
+    private val seedUniquifier = AtomicInteger(sequenceStart)
     fun next(): Random {
         var current: Int
         var next: Int

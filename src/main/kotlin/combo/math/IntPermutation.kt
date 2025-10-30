@@ -1,6 +1,5 @@
 package combo.math
 
-import combo.util.assert
 import kotlin.random.Random
 
 fun permutation(size: Int = Int.MAX_VALUE, rng: Random = Random(0)): IntPermutation {

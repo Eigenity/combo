@@ -48,7 +48,7 @@ import kotlin.math.min
  * @param minScoreSample Use this for introspection during development to sample all minimum scores.
  */
 class GeneticAlgorithm(val problem: Problem,
-                       override val randomSeed: Int = nanos().toInt(),
+                       override val randomSeed: Int = System.currentTimeMillis().toInt(),
                        override val timeout: Long = -1L,
                        val candidateSize: Int = max(20, min(problem.nbrValues * 5, 300)),
                        val instanceFactory: InstanceFactory = BitArrayFactory,
@@ -74,7 +74,7 @@ class GeneticAlgorithm(val problem: Problem,
     private var randomSequence = RandomSequence(randomSeed)
 
     override fun optimizeOrThrow(function: ObjectiveFunction, assumptions: IntCollection, guess: Instance?): Instance {
-        val end = if (timeout > 0L) millis() + timeout else Long.MAX_VALUE
+        val end = if (timeout > 0L) System.currentTimeMillis() + timeout else Long.MAX_VALUE
         val rng = randomSequence.next()
         val lowerBound = function.lowerBound()
         val upperBound = function.upperBound()
@@ -153,11 +153,11 @@ class GeneticAlgorithm(val problem: Problem,
                 scoreSample.accept(score)
                 minScoreSample.accept(candidates.bestScore)
 
-                if (millis() > end || (stalls >= stallSteps && restart < restarts) || candidates.bestScore == candidates.worstScore)
+                if (System.currentTimeMillis() > end || (stalls >= stallSteps && restart < restarts) || candidates.bestScore == candidates.worstScore)
                     break
             }
 
-            if (restart == restarts || millis() > end) break
+            if (restart == restarts || System.currentTimeMillis() > end) break
 
             val keep = IntHashSet(nullValue = -1)
             var tries = 0
@@ -189,7 +189,7 @@ class GeneticAlgorithm(val problem: Problem,
         if (candidates.instances[ix].totalUnsatisfied == 0)
             return candidates.instances[ix].instance
 
-        if (millis() > end)
+        if (System.currentTimeMillis() > end)
             throw TimeoutException(timeout)
         else
             throw IterationsReachedException(restarts)
@@ -199,7 +199,7 @@ class GeneticAlgorithm(val problem: Problem,
             optimizeOrThrow(SatObjective, assumptions, guess)
 
     class Builder(val problem: Problem) {
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var timeout: Long = -1L
         private var candidateSize: Int = max(20, min(problem.nbrValues * 5, 300))
         private var instanceFactory: InstanceFactory = BitArrayFactory
@@ -328,4 +328,3 @@ class GeneticAlgorithm(val problem: Problem,
         }
     }
 }
-

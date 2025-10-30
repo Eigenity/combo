@@ -3,7 +3,6 @@ package combo.sat.constraints
 import combo.math.nextFloat
 import combo.sat.*
 import combo.util.IntRangeCollection
-import combo.util.assert
 import combo.util.bitCount
 import kotlin.random.Random
 

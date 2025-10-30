@@ -208,7 +208,6 @@ class Model(val problem: Problem, val index: VariableIndex, val scope: Scope) {
          * @param reifiedValue value that serves as indicator variable for all variables defined in sub model.
          * @param scopeName name of the scope, used to create [Assignment] on the sub model only.
          */
-        @JsName("reifiedModel")
         fun model(reifiedValue: Value, scopeName: String = reifiedValue.name, init: ModelBuilder<ChildScope<S>>.() -> Unit): ModelBuilder<ChildScope<S>> {
             require(reifiedValue.canonicalVariable == canonicalVariable || index.contains(reifiedValue.canonicalVariable)) { "${reifiedValue.canonicalVariable} not found in model." }
             @Suppress("UNCHECKED_CAST")

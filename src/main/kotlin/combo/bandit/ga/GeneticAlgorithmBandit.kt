@@ -13,6 +13,7 @@ import combo.sat.optimizers.LocalSearch
 import combo.sat.optimizers.Optimizer
 import combo.sat.optimizers.SatObjective
 import combo.util.*
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.collections.set
 import kotlin.math.max
 import kotlin.math.min
@@ -45,7 +46,7 @@ class GeneticAlgorithmBandit(
         val candidates: BanditCandidates,
         val banditPolicy: BanditPolicy,
         val optimizer: Optimizer<SatObjective> = LocalSearch(problem),
-        override val randomSeed: Int = nanos().toInt(),
+        override val randomSeed: Int = System.currentTimeMillis().toInt(),
         override val maximize: Boolean = true,
         override val rewards: DataSample = VoidSample,
         val selection: SelectionOperator<BanditCandidates> = TournamentSelection(5),
@@ -204,7 +205,7 @@ class GeneticAlgorithmBandit(
     class Builder(val problem: Problem, val banditPolicy: BanditPolicy) : BanditBuilder<InstancesData> {
 
         private var optimizer: Optimizer<SatObjective>? = null
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var maximize: Boolean = true
         private var rewards: DataSample = VoidSample
         private var selection: SelectionOperator<BanditCandidates> = TournamentSelection(5)

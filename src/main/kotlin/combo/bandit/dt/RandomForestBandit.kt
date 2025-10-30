@@ -17,6 +17,7 @@ import combo.sat.optimizers.LinearObjective
 import combo.sat.optimizers.LocalSearch
 import combo.sat.optimizers.Optimizer
 import combo.util.*
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.*
 import kotlin.random.Random
 
@@ -167,7 +168,7 @@ class RandomForestBandit(val parameters: TreeParameters,
 
         private var trees: Int = 10
         private var optimizer: Optimizer<LinearObjective>? = null
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var maximize: Boolean = true
         private var splitMetric: SplitMetric =
                 if (banditPolicy.prior is BinaryEstimator) GiniCoefficient

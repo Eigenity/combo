@@ -3,20 +3,19 @@ package combo.bandit.univariate
 import combo.math.DataSample
 import combo.math.VarianceEstimator
 import combo.math.VoidSample
-import combo.util.AtomicLong
 import combo.util.RandomSequence
-import combo.util.nanos
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.jvm.JvmOverloads
 
 /**
  * A univariate bandit with fixed number of arms. It stores one estimator per arm.
  */
 class MultiArmedBandit @JvmOverloads constructor(
-        val nbrArms: Int,
-        val banditPolicy: BanditPolicy,
-        override val randomSeed: Int = nanos().toInt(),
-        override val maximize: Boolean = true,
-        override val rewards: DataSample = VoidSample) : UnivariateBandit<List<VarianceEstimator>> {
+    val nbrArms: Int,
+    val banditPolicy: BanditPolicy,
+    override val randomSeed: Int = System.currentTimeMillis().toInt(),
+    override val maximize: Boolean = true,
+    override val rewards: DataSample = VoidSample) : UnivariateBandit<List<VarianceEstimator>> {
 
     init {
         require(nbrArms > 0)
@@ -82,7 +81,7 @@ class MultiArmedBandit @JvmOverloads constructor(
     }
 
     class Builder(val nbrArms: Int, val banditPolicy: BanditPolicy) {
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var maximize: Boolean = true
         private var rewards: DataSample = VoidSample
 

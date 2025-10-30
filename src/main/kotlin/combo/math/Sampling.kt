@@ -3,7 +3,6 @@
 package combo.math
 
 import combo.util.MIN_VALUE32
-import combo.util.assert
 import kotlin.jvm.JvmName
 import kotlin.math.*
 import kotlin.random.Random
@@ -154,4 +153,3 @@ fun Random.nextExponential(rate: Float): Float {
     } while (u == 0.0f || u == 1.0f)
     return -ln(u) / rate
 }
-

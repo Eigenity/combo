@@ -1,10 +1,11 @@
 package combo.bandit.univariate
 
 import combo.bandit.ParallelMode
-import combo.math.DataSample
-import combo.math.VarianceEstimator
-import combo.math.permutation
+import combo.math.*
 import combo.util.*
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
+import kotlin.concurrent.write
 import kotlin.math.min
 
 /**
@@ -231,7 +232,7 @@ class ParallelUnivariateBandit<D> private constructor(val bandits: Array<Univari
     }
 
     private class ConcurrentUnivariateBandit<D>(val base: UnivariateBandit<D>) : UnivariateBandit<D> by base {
-        val lock: ReadWriteLock = ReentrantReadWriteLock()
+        val lock = ReentrantReadWriteLock()
         fun tryChoose(): Int {
             val locked = lock.readLock().tryLock()
             if (!locked) return -1
@@ -249,4 +250,3 @@ class ParallelUnivariateBandit<D> private constructor(val bandits: Array<Univari
         override fun exportData() = lock.read { base.exportData() }
     }
 }
-

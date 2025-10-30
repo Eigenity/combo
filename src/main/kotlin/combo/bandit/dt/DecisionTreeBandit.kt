@@ -13,6 +13,7 @@ import combo.sat.optimizers.LocalSearch
 import combo.sat.optimizers.Optimizer
 import combo.sat.optimizers.SatObjective
 import combo.util.*
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.ln
 import kotlin.math.sqrt
 
@@ -284,7 +285,7 @@ class DecisionTreeBandit(val parameters: TreeParameters, root: Node? = null, val
     class Builder(val model: Model, val banditPolicy: BanditPolicy) : PredictionBanditBuilder<TreeData> {
 
         private var optimizer: Optimizer<SatObjective>? = null
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var maximize: Boolean = true
         private var splitMetric: SplitMetric =
                 if (banditPolicy.baseData() is BinaryEstimator) GiniCoefficient

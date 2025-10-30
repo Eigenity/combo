@@ -11,6 +11,7 @@ import combo.sat.optimizers.ExhaustiveSolver
 import combo.sat.optimizers.LocalSearch
 import combo.sat.optimizers.Optimizer
 import combo.util.*
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * This bandit uses an independent univariate bandit policy for each of a pre-defined [Instance].
@@ -26,7 +27,7 @@ import combo.util.*
 class ListBandit(instances: Array<Instance>,
                  val banditPolicy: BanditPolicy,
                  priors: Map<Instance, VarianceEstimator> = emptyMap(),
-                 override val randomSeed: Int = nanos().toInt(),
+                 override val randomSeed: Int = System.currentTimeMillis().toInt(),
                  override val maximize: Boolean = true,
                  override val rewards: DataSample = VoidSample) : Bandit<InstancesData> {
 
@@ -88,7 +89,7 @@ class ListBandit(instances: Array<Instance>,
             private val instances: MutableList<Instance>? = null)
         : BanditBuilder<InstancesData> {
 
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var maximize: Boolean = true
         private var rewards: DataSample = VoidSample
         private var import: InstancesData? = null
@@ -140,4 +141,3 @@ class ListBandit(instances: Array<Instance>,
         }
     }
 }
-

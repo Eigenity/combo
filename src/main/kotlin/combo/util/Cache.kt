@@ -1,5 +1,9 @@
 package combo.util
 
+import java.util.concurrent.locks.Lock
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.withLock
+
 @Suppress("UNCHECKED_CAST")
 class RandomListCache<E>(val maxSize: Int, randomSeed: Int) {
 
@@ -45,7 +49,7 @@ class RandomListCache<E>(val maxSize: Int, randomSeed: Int) {
 }
 
 @Suppress("UNCHECKED_CAST")
-class RandomMapCache<K, V>(val maxSize: Int, randomSeed: Int = nanos().toInt()) {
+class RandomMapCache<K, V>(val maxSize: Int, randomSeed: Int = System.currentTimeMillis().toInt()) {
 
     private val readWriteLock = ReentrantReadWriteLock()
     private val writeLock: Lock = readWriteLock.writeLock()

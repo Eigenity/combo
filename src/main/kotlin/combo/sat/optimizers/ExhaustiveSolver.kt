@@ -14,7 +14,7 @@ import combo.util.*
  * @param maxOptimizationInstances Maximum number of instances that will be observed when optimizing.
  *
  */
-class ExhaustiveSolver(val problem: Problem, override val randomSeed: Int = nanos().toInt(),
+class ExhaustiveSolver(val problem: Problem, override val randomSeed: Int = System.currentTimeMillis().toInt(),
                        override val timeout: Long = -1L,
                        val propagateAssumptions: Boolean = true,
                        val instanceFactory: InstanceFactory = BitArrayFactory,
@@ -31,13 +31,13 @@ class ExhaustiveSolver(val problem: Problem, override val randomSeed: Int = nano
             return guess
         val remap = createRemap(propAssumptions)
         val nbrVariables = problem.nbrValues - propAssumptions.size
-        val end = if (timeout > 0) millis() + timeout else Long.MAX_VALUE
+        val end = if (timeout > 0) System.currentTimeMillis() + timeout else Long.MAX_VALUE
         return InstancePermutation(nbrVariables, instanceFactory, randomSequence.next())
                 .asSequence()
-                .takeWhile { millis() <= end }
+                .takeWhile { System.currentTimeMillis() <= end }
                 .map { remapInstance(propAssumptions, it, remap) }
                 .filter { problem.satisfies(it) }
-                .firstOrNull() ?: throw if (millis() > end) TimeoutException(timeout) else UnsatisfiableException()
+                .firstOrNull() ?: throw if (System.currentTimeMillis() > end) TimeoutException(timeout) else UnsatisfiableException()
     }
 
     override fun asSequence(assumptions: IntCollection): Sequence<Instance> {
@@ -48,10 +48,10 @@ class ExhaustiveSolver(val problem: Problem, override val randomSeed: Int = nano
         }
         val remap = createRemap(propAssumptions)
         val nbrVariables = problem.nbrValues - propAssumptions.size
-        val end = if (timeout > 0) millis() + timeout else Long.MAX_VALUE
+        val end = if (timeout > 0) System.currentTimeMillis() + timeout else Long.MAX_VALUE
         return InstancePermutation(nbrVariables, instanceFactory, randomSequence.next())
                 .asSequence()
-                .takeWhile { millis() <= end }
+                .takeWhile { System.currentTimeMillis() <= end }
                 .map { remapInstance(propAssumptions, it, remap) }
                 .filter { problem.satisfies(it) }
     }
@@ -106,4 +106,3 @@ class ExhaustiveSolver(val problem: Problem, override val randomSeed: Int = nano
         } else instance
     }
 }
-

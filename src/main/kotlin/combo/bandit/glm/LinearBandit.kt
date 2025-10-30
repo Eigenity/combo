@@ -12,7 +12,6 @@ import combo.sat.Instance
 import combo.sat.optimizers.*
 import combo.util.IntCollection
 import combo.util.RandomSequence
-import combo.util.nanos
 
 /**
  * Generalized linear model (GLM) bandit with Thompson sampling. The most important configuration parameter is [family],
@@ -29,7 +28,7 @@ import combo.util.nanos
  */
 class LinearBandit(val model: Model,
                    val linearModel: LinearModel,
-                   override val randomSeed: Int = nanos().toInt(),
+                   override val randomSeed: Int = System.currentTimeMillis().toInt(),
                    override val maximize: Boolean = true,
                    val optimizer: Optimizer<ObjectiveFunction> = LocalSearch.Builder(model.problem).randomSeed(randomSeed).build(),
                    val effectCoding: Boolean = true,
@@ -84,7 +83,7 @@ class LinearBandit(val model: Model,
 
     class Builder(val model: Model) : PredictionBanditBuilder<LinearData> {
 
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var rewards: DataSample = VoidSample
         private var maximize: Boolean = true
         private var optimizer: Optimizer<ObjectiveFunction>? = null

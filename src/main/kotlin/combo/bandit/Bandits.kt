@@ -10,7 +10,6 @@ import combo.sat.optimizers.Optimizer
 import combo.sat.optimizers.SatObjective
 import combo.util.EmptyCollection
 import combo.util.IntCollection
-import combo.util.nanos
 import kotlin.math.abs
 
 /**
@@ -220,7 +219,7 @@ class RandomBandit(val optimizer: Optimizer<SatObjective>, override val rewards:
     class Builder(val problem: Problem) : BanditBuilder<Nothing> {
 
         private var rewards: DataSample = VoidSample
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var optimizer: Optimizer<SatObjective>? = null
 
         override fun rewards(rewards: DataSample) = apply { this.rewards = rewards }

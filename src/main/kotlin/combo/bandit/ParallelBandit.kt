@@ -4,6 +4,9 @@ import combo.math.DataSample
 import combo.math.permutation
 import combo.sat.Instance
 import combo.util.*
+import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
+import kotlin.concurrent.write
 
 /**
  * Bandit that can be used in parallel. The [processUpdates] method must be called periodically.

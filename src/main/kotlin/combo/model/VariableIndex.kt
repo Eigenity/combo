@@ -1,6 +1,5 @@
 package combo.model
 
-import combo.util.assert
 
 /**
  * Contains mappings from variable to the index they have in optimization problems.

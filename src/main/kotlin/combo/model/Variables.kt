@@ -7,8 +7,8 @@ import combo.sat.constraints.Cardinality
 import combo.sat.constraints.Disjunction
 import combo.sat.constraints.ReifiedEquivalent
 import combo.sat.constraints.Relation
-import combo.util.AtomicInt
 import combo.util.IntRangeCollection
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.jvm.JvmName
 
 /**
@@ -23,7 +23,7 @@ abstract class Variable<in V, out T>(override val name: String) : Value {
 
     companion object {
         fun defaultName() = "${"$"}x_${COUNTER.getAndIncrement()}"
-        private val COUNTER: AtomicInt = AtomicInt()
+        private val COUNTER: AtomicInteger = AtomicInteger()
     }
 
     override fun toLiteral(variableIndex: VariableIndex) =
@@ -181,4 +181,3 @@ class Nominal<V> constructor(name: String, optional: Boolean, parent: Value, var
 
     override fun toString() = "Nominal($name)"
 }
-

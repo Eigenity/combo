@@ -38,7 +38,7 @@ import kotlin.math.min
  * @param transitiveImplications Used to propagate flips for implications, set to null for no propagations.
  */
 class LocalSearch(val problem: Problem,
-                  override val randomSeed: Int = nanos().toInt(),
+                  override val randomSeed: Int = System.currentTimeMillis().toInt(),
                   override val timeout: Long = -1L,
                   val restarts: Int = 5,
                   val maxSteps: Int = max(100, problem.nbrValues),
@@ -58,7 +58,7 @@ class LocalSearch(val problem: Problem,
     private val tabuMask = tabuListSize - 1
 
     override fun optimizeOrThrow(function: ObjectiveFunction, assumptions: IntCollection, guess: Instance?): Instance {
-        val end = if (timeout > 0L) millis() + timeout else Long.MAX_VALUE
+        val end = if (timeout > 0L) System.currentTimeMillis() + timeout else Long.MAX_VALUE
 
         val rng = randomSequence.next()
         val assumption: Constraint
@@ -185,12 +185,12 @@ class LocalSearch(val problem: Problem,
                     if (abs(bestValue - lowerBound) < eps) return validator.instance
                     else if (improvement < eps) break
                 }
-                if (millis() > end) break
+                if (System.currentTimeMillis() > end) break
             }
-            if (millis() > end) break
+            if (System.currentTimeMillis() > end) break
         }
         return bestInstance
-                ?: (if (millis() > end) throw TimeoutException(timeout) else throw IterationsReachedException(restarts))
+                ?: (if (System.currentTimeMillis() > end) throw TimeoutException(timeout) else throw IterationsReachedException(restarts))
     }
 
     override fun witnessOrThrow(assumptions: IntCollection, guess: Instance?) = optimizeOrThrow(SatObjective, assumptions, guess)
@@ -199,7 +199,7 @@ class LocalSearch(val problem: Problem,
      * Problem is the only mandatory parameter.
      */
     class Builder(val problem: Problem) :OptimizerBuilder<ObjectiveFunction> {
-        private var randomSeed: Int = nanos().toInt()
+        private var randomSeed: Int = System.currentTimeMillis().toInt()
         private var timeout: Long = -1L
         private var restarts: Int = 5
         private var maxSteps: Int = max(100, problem.nbrValues)
@@ -293,4 +293,3 @@ class LocalSearch(val problem: Problem,
         }
     }
 }
-

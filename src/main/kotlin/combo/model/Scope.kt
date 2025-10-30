@@ -2,7 +2,6 @@ package combo.model
 
 import combo.util.ArrayQueue
 
-import combo.util.assert
 
 class ChildScope<out D : Scope> internal constructor(override val scopeName: String, override val reifiedValue: Value, override val parent: D) : Scope {
     override fun toString() = "ChildScope($scopeName)"
@@ -176,4 +175,3 @@ interface Scope : Iterable<Variable<*, *>> {
     override fun iterator() = asSequence().iterator()
 
 }
-

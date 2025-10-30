@@ -6,7 +6,6 @@ import combo.math.nextGeometric
 import combo.math.permutation
 import combo.sat.TransitiveImplications
 import combo.sat.literal
-import combo.util.assert
 import combo.util.transformArray
 import kotlin.math.max
 import kotlin.math.min

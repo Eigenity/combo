@@ -1,7 +1,6 @@
 package combo.math
 
 import combo.util.IntArrayList
-import combo.util.assert
 import kotlin.random.Random
 
 interface DiscreteSampler {

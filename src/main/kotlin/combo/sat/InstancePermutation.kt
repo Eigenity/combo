@@ -1,7 +1,7 @@
 package combo.sat
 
 import combo.math.CyclingHashIntPermutation
-import combo.util.AtomicInt
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -12,7 +12,7 @@ class InstancePermutation constructor(
         private val nbrVariables: Int, val factory: InstanceFactory, rng: Random) : Iterator<Instance> {
 
     private val permutation: Array<CyclingHashIntPermutation>
-    private var count: AtomicInt = AtomicInt(0)
+    private var count: AtomicInteger = AtomicInteger(0)
     private val lastBits = nbrVariables % 31
 
     init {
