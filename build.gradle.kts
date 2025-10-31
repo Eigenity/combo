@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm") version "2.2.0"
 }
 
-group = "egenity.combo"
+group = "com.egenity.combo"
 version = "0.2-SNAPSHOT"
 
 repositories {
