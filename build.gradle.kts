@@ -28,6 +28,7 @@ kotlin {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation("org.slf4j:slf4j-api:2.0.17")
     implementation("org.ow2.sat4j:org.ow2.sat4j.maxsat:2.3.5")
     testImplementation(kotlin("test"))
 }
