@@ -1,5 +1,12 @@
 This project is currently under transformation into a cloud-native self hosted tool.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Build](https://github.com/Eigenity/combo/actions/workflows/build.yml/badge.svg)](https://github.com/Eigenity/combo/actions/workflows/build.yml)
+[![Docker](https://img.shields.io/badge/Docker-ghcr.io%2FEigenity%2Fcombo-blue)](https://ghcr.io/Eigenity/combo)
+[![Helm](https://img.shields.io/badge/Helm-chart-blueviolet)](https://artifacthub.io/packages/helm/eigenity/combo)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9%2B-orange)](https://kotlinlang.org/)
+
+
 # COMBO
 Combo is a library for Constraint Oriented Multi-variate Bandit Optimization (COMBO) applied to software parameters. It is used to optimize software with user data in a production environment. It supports multiple methods with a combination of machine learning, combinatorial optimization, and Thompson sampling. Some of the supported ML algorithms are: generalized linear model (GLM), random forest, deep learning, and genetic algorithms. Using COMBO, each user recieve their own configuration with potentially thousands of variables in milliseconds. As the results of each users experience with their configuration is recorded the resulting configurations will be better and better. Depending on the method employed this can require some statistical modeling.
 
