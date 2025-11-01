@@ -1,3 +1,0 @@
- - name: Run build
-    run: |
-      ./gradlew clean build
