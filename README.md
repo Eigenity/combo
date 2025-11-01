@@ -12,15 +12,15 @@
 
 ## 🚀 Overview
 
-**COMBO** (Constraint Oriented Multi-variate Bandit Optimization) is a **cloud-native, self-hosted optimization engine** for adaptive systems.  It continuously improves **prompts**, **user interfaces**, and **software configurations** using **real interaction data**. Designed for **k8s deployment**, COMBO can optimize thousands of variables per user in milliseconds, automatically learning what works best as feedback accumulates.
+**COMBO** (Constraint Oriented Multi-variate Bandit Optimization) is a **cloud-native, self-hosted optimization engine** for adaptive systems.  It continuously improves **prompts**, **user interfaces** or other **software configurations** using **real interaction data**. Designed for **k8s deployment**, COMBO can optimize thousands of variables per user in milliseconds, automatically learning what works best as feedback accumulates.
 
 ## ✨ Key Features
 
-- ⚙️ **Self-Hosted & Cloud-Native** — Deploy easily via Helm to self-hosted Kubernetes clusters
-- 🤖 **LLM & UI Optimization** — Tune prompts, layouts, or behaviors based on user outcomes
-- 🌳 **Declarative Search Spaces** — Define structured variable models with constraints through SDKs or HTTP API
-- ⏱️ **Personalized Configurations** — Generate and refine per-user configurations in real time
-- 🧩 **Flexible Optimization Engine** — Easily setup your optimization engine through sane defaults and robust algorithms
+- **Self-Hosted & Cloud-Native**: Deploy easily via Helm to self-hosted Kubernetes clusters
+- **LLM & UI Optimization**: Tune prompts, layouts, or behaviors based on user outcomes
+- **Declarative Search Spaces**: Define structured variable models with constraints through SDKs or HTTP API
+- **Personalized Configurations**: Generate and refine per-user configurations in real time
+- **Flexible Optimization Engine**: Easily setup your optimization engine through sane defaults and robust algorithms
 
 ---
 
