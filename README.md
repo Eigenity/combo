@@ -1,82 +1,75 @@
-This project is currently under transformation into a cloud-native self hosted tool.
+## This project is currently under transformation into a cloud-native self hosted tool.
 
-# COMBO
-Combo is a library for Constraint Oriented Multi-variate Bandit Optimization (COMBO) applied to software parameters. It is used to optimize software with user data in a production environment. It supports multiple methods with a combination of machine learning, combinatorial optimization, and Thompson sampling. Some of the supported ML algorithms are: generalized linear model (GLM), random forest, deep learning, and genetic algorithms. Using COMBO, each user recieve their own configuration with potentially thousands of variables in milliseconds. As the results of each users experience with their configuration is recorded the resulting configurations will be better and better. Depending on the method employed this can require some statistical modeling.
+[![License: Apache](https://img.shields.io/badge/License-Apache-blue.svg)](LICENSE)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2%2B-orange)](https://kotlinlang.org/)
+<!--[![Build](https://github.com/Eigenity/combo/actions/workflows/build.yml/badge.svg)](https://github.com/Eigenity/combo/actions/workflows/build.yml)-->
+<!-- [![Docker](https://img.shields.io/badge/Docker-ghcr.io%2FEigenity%2Fcombo-blue)](https://ghcr.io/Eigenity/combo) -->
+<!-- [![Helm](https://img.shields.io/badge/Helm-chart-blueviolet)](https://artifacthub.io/packages/helm/eigenity/combo) -->
 
-Using it requires three steps: 
+> **Kubernetes-ready Kotlin tool for optimizing LLM prompts, UIs, or other software parameters from real user feedback.**
 
-1. Create a model of the variables and constraints in the search space.
-2. Map the model to actual code behavior.
-3. Create a multi-variate multi-armed bandit algorithm optimizer.
+---
 
-## Model of the search space
+## 🚀 Overview
 
-A model describes the variables in the optimization problem in a tree structure. Lets start of with a simple example, which is intended to be used to display a top-list of the most important media categories on a web site. Here, the optimal configuration will be automatically calculated over time as users are using it, based on how well each category performs in terms of eg sales or click data.
+**COMBO** (Constraint Oriented Multi-variate Bandit Optimization) is a **cloud-native, self-hosted optimization engine** for adaptive systems.  It continuously improves **software configurations** using **real interaction data**. COMBO can optimize thousands of variables per user in milliseconds, automatically learning what works best as feedback accumulates.
 
-```kotlin
-fun main() {
+## Installation
+- **As a JVM library** using Kotlin or Java using
+`gradle todo`
+- **As a Self-hosted Web Server**. Deploy easily via Helm to self-hosted Kubernetes clusters (WIP)
 
-    val myModel = model {
+## Key features 
+- **LLM & UI Optimization**: Tune prompts, layouts, or behaviors based on user outcomes
+- **Declarative Search Spaces**: Define structured variable models with constraints through SDKs or HTTP API
+- **Personalized Configurations**: Generate and refine per-user configurations in real time
+- **Flexible Optimization Engine**: Easily setup your optimization engine through sane defaults and robust algorithms
 
-        // Context variables
-        int("DisplayWidth", min = 640, max = 1920)
-        val customerType = nominal("CustomerType", "Child", "Company", "Person")
+---
 
-        // The category tree is encoded directly
+## 🔧 Quick Start
 
-        //Games can be absent
-        val games = optionalMultiple("Games", "Shooter", "Platform", "Sports", "Action", "Adventure", "Strategy")
+Currently only available as a maven central library.
 
-        // Movies is a sub-category with multiple sub-options
-        val movies = model("Movies") {
-            val horror = optionalMultiple("Horror", "Slasher", "Splatter", "Zombie")
-            optionalMultiple("Action", "Thriller", "Martial arts", "Crime")
-            optionalMultiple("Sci-fi", "Supernatural", "Super heroes", "Fantasy")
+1. **Define the search space**
+   ```kotlin
+    val model = model {
 
-            // This adds a constraint that ensures that whenever CustomerType is Child then any of the 
-            // horror categories are hidden.
-            val child = customerType.option("Child")
-            impose { child equivalent !horror }
+        // Context: available token budget
+        int("TokenBudget", min = 500, max = 4000)
+
+        // Parameters to optimize
+        val systemTone = nominal("SystemTone", "Friendly", "Professional", "Concise", "Creative")
+        val includeExamples = boolean("IncludeExamples")
+        val verbosity = int("VerbosityLevel", min = 1, max = 5)
+
+        // Estimated token cost for each element
+        val toneCost = mapOf(
+            "Friendly" to 200,
+            "Professional" to 250,
+            "Concise" to 150,
+            "Creative" to 300
+        )
+
+        // Impose a linear constraint on total token usage
+        impose {
+            // approximate token usage = base + toneCost + verbosity*100 + examples*500
+            val totalTokens = verbosity * 100 +
+                (includeExamples.asInt() * 500) +
+                systemTone.mapValues(toneCost).sum() + 200 // base system cost
+
+            totalTokens lessThanEq getInt("TokenBudget")
         }
-
-        // ... add more categories as needed
-
-        // Add a hard constraint that the number of categories must be between 2 and 5.
-        // This could have been a dynamic parameter with the number of movie genres instead.
-        val categoryVariables = games.values + movies.scope.variables.asSequence()
-                .flatMap { (it as Multiple<*>).values }.toList().toTypedArray()
-        impose { atLeast(2, *categoryVariables) }
-        impose { atMost(5, *categoryVariables) }
     }
-}
-```
+    ```
 
-## Optimizer
+2. **Create and use an optimizer**
 
-Creating an optimizer is straightforward. There are several hyper-parameters that can be tuned for better performance. The random forest algorithm is recommended to start with because it is quite robust to bad tuning.
+    ```kotlin
+    val optimizer = RandomForestBandit.Builder(model)
+    val assignment = optimizer.chooseOrThrow()
+    println("Prompt config: ${assignment.toMap()}")
 
-```kotlin
-// Using the feature model "myModel" from above
-// This optimizer will maximize binomial data (success/failures).
-val optimizer = RandomForestBandit.Builder(myModel)
-```
-
-Using the optimizer then is as simple as this:
-
-```kotlin
-val assignment1 = optimizer.chooseOrThrow()
-// The values can be queried like so:
-assignment1.getBoolean("Horror")
-// It can be used as an ordinary map from String to value as such (but then the structure is lost).
-val map = assignment1.toMap()
-
-// Update with the result of an assignment
-optimizer.update(assignment1, 1f)
-```
-
-To get a "personalized" assignment do this:
-
-```kotlin
-val assignment2 = optimizer.chooseOrThrow(myModel["DisplayWidth", 1920], myModel["CustomerType", "Child"])
-optimizer.update(assignment2, 0f)
-```
+    // Simulate user feedback (e.g., rating or completion quality)
+    optimizer.update(assignment, 0.85f)
+    ```
